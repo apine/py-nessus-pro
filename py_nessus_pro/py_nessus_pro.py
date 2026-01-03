@@ -156,6 +156,11 @@ class PyNessusPro:
             raise ValueError(f"Scan ID {scan_id} not found")
         self.scans[scan_id].set_program_scan(enabled, date)
 
+    def update_scan(self, scan_id: int, metadata: dict):
+        if scan_id not in self.scans:
+            raise ValueError(f"Scan ID {scan_id} not found")
+        return self.scans[scan_id].update(metadata)
+
     def post_scan(self, scan_id: int):
         if scan_id not in self.scans:
             raise ValueError(f"Scan ID {scan_id} not found")

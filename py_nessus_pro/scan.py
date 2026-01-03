@@ -283,3 +283,16 @@ class _Scan():
         
         logger.success("Reports exported to " + path)
         return path
+
+    def update(self, metadata: dict):
+        self.metadata = metadata
+        if not self.metadata["settings"]["text_targets"]:
+            raise Exception("[!] No targets provided")
+        if not self.metadata["settings"]["name"]:
+            raise Exception("[!] No name provided")
+
+        x = json.loads(requests.put(f"{self.nessus_server}/scans/{self.id}", headers=self.headers, json=self.metadata, verify=False).text)
+        logger.info("Scan updated: " + str(x["scan"]["id"]) + " (" + self.metadata["settings"]["name"] + ")")
+
+        self.id = x["scan"]["id"]
+        return self.id
